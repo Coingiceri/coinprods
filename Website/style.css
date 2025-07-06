@@ -1,0 +1,90 @@
+.logo.logo-big {
+  height: 140px;
+  width: auto;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  transition: filter 0.3s cubic-bezier(.4,0,.2,1), height 0.3s cubic-bezier(.4,0,.2,1);
+  filter: brightness(0) invert(1); /* white for dark mode */
+}
+body.light .logo.logo-big {
+  filter: brightness(0) invert(0); /* black for light mode */
+}
+@media (max-width: 700px) {
+  .logo.logo-big {
+    height: 90px;
+  }
+}
+
+/* Make titles white in dark, dark in light */
+.brand-coin,
+.brand-productions {
+  color: #fff;
+  transition: color 0.3s cubic-bezier(.4,0,.2,1);
+}
+body.light .brand-coin,
+body.light .brand-productions {
+  color: #181c22;
+}
+
+/* Cinematic full-screen image and overlaid title */
+.portfolio-grid {
+  width: 100vw;
+  height: calc(100vh - 180px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+.portfolio-item {
+  width: 100vw;
+  height: 100%;
+  background: none;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: box-shadow var(--transition);
+  padding: 0;
+}
+.portfolio-thumb.full-frame {
+  width: 100vw;
+  height: calc(100vh - 180px);
+  max-width: 100vw;
+  max-height: 80vh;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
+  box-shadow: 0 8px 40px rgba(30, 41, 59, 0.28);
+  background: #000;
+  transition: box-shadow var(--transition);
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+.portfolio-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2.5rem;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-align: center;
+  color: rgba(255,255,255,0.96);
+  letter-spacing: 0.1em;
+  text-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.18);
+  background: none;
+  pointer-events: none;
+  z-index: 2;
+  transition: color var(--transition);
+  text-transform: uppercase;
+}
+body.light .portfolio-title {
+  color: #181c22;
+  text-shadow: 0 8px 32px rgba(255,255,255,0.25), 0 2px 8px rgba(255,255,255,0.08);
+}

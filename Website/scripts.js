@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>COIN PRODUCTIONS</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Monoton&family=Marmelad&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <!-- GSAP for animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --teal: #1dc0e9;
+      --gold: #ffbf00;
+      --dark-bg: #0e1217;
+      --light-bg: #f7f7f7;
+      --dark-text: #ffffff;
+      --light-text: #121212;
+      --transition: 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark-bg);
+      color: var(--dark-text);
+      margin: 0;
+      transition: background var(--transition), color var(--transition);
+      overflow-x: hidden;
+      padding-top: 80px;
+    }
+
+    body.light {
+      background: var(--light-bg);
+      color: var(--light-text);
+    }
+
+    /* Fixed Header - Transparent */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: transparent;
+      color: #fff;
+      transition: all var(--transition);
+      z-index: 1000;
+      box-sizing: border-box;
+    }
+
+    body.light header {
+      color: #000;
+    }
+
+    .brand {
+      font-family: 'Monoton', cursive;
+      font-size: 2.3rem;
+      letter-spacing: 6px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .toggle-switch {
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      border-radius: 20px;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: inherit;
+      transition: background var(--transition);
+      margin-left: auto;
+    }
+
+    .toggle-switch:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    main {
+      text-align: center;
+      padding: 2.5rem 1rem;
+    }
+
+    /* Works Banner */
+    .recent-work {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      max-height: 600px;
+      margin-bottom: 4rem;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .banner-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+      z-index: 1;
+      transition: opacity 1.2s ease-in-out;
+      border-radius: 8px;
+    }
+
+    .banner-bg::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+      border-radius: 8px;
+    }
+
+    .banner-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 5%;
+    }
+
+    .recent-work-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-weight: 400;
+      font-size: 3.5rem;
+      letter-spacing: 3px;
+      color: var(--teal);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      margin-right: 3rem;
+      transition: color var(--transition);
+    }
+
+    body.light .recent-work-label {
+      color: var(--gold);
+    }
+
+    .banner-right {
+      margin-left: auto;
+      text-align: right;
+      max-width: 50%;
+    }
+
+    .banner-thumb {
+      width: 220px;
+      height: 220px;
+      object-fit: cover;
+      /* Removed border property */
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transform: scale(0.95);
+      transition: transform 0.5s ease;
+      border-radius: 0;
+    }
+
+    .banner-title {
+      margin-top: 1.5rem;
+      font-family: 'Marmelad', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: white;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .banner-class {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 0.5rem;
+    }
+
+    .banner-nav {
+      position: absolute;
+      bottom: 2rem;
+      right: 5%;
+      display: flex;
+      gap: 1rem;
+      z-index: 3;
+    }
+
+    .banner-nav button {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .banner-nav button.active {
+      background: var(--teal);
+    }
+
+    body.light .banner-nav button.active {
+      background: var(--gold);
+    }
+
+    /* Projects Grid - Two projects per row */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
+      margin-top: 3rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .project {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    .project:hover {
+      transform: translateY(-5px);
+    }
+
+    .portfolio-thumb {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+      filter: brightness(0.95) contrast(1.1) saturate(1.1);
+      transition: transform 0.3s;
+      border-radius: 0;
+    }
+
+    .portfolio-thumb:hover {
+      transform: scale(1.02);
+    }
+
+    .project-info {
+      padding: 1.2rem;
+      background: rgba(0, 0, 0, 0.7);
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      transform: translateY(100%);
+      transition: transform 0.3s;
+      border-radius: 0;
+    }
+
+    .project:hover .project-info {
+      transform: translateY(0);
+    }
+
+    .song-title {
+      font-family: 'Marmelad', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--teal);
+      margin: 0;
+    }
+
+    body.light .song-title {
+      color: var(--gold);
+    }
+
+    .class {
+      font-size: 1rem;
+      color: #aaa;
+      margin-top: 0.3rem;
+    }
+
+    /* Tabs */
+    .tab-links {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .tab-links a {
+      padding: 0.8rem 1.4rem;
+      font-size: 1rem;
+      border-radius: 0;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background var(--transition), color var(--transition);
+      background: var(--gold);
+      color: #000;
+    }
+
+    body.light .tab-links a {
+      background: var(--teal);
+      color: #fff;
+    }
+
+    .tab-links a:hover {
+      opacity: 0.9;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 70px;
+      }
+
+      header {
+        padding: 0.8rem 1rem;
+      }
+
+      .brand {
+        font-size: 1.8rem;
+      }
+
+      .toggle-switch {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .recent-work {
+        height: 50vh;
+      }
+
+      .recent-work-label {
+        font-size: 3rem;
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+
+      .banner-content {
+        flex-direction: column;
+        padding: 0 1rem;
+      }
+
+      .banner-right {
+        max-width: 100%;
+        text-align: center;
+        margin-left: 0;
+      }
+
+      .banner-thumb {
+        width: 200px;
+        height: 200px;
+      }
+
+      .banner-title {
+        font-size: 1.8rem;
+      }
+
+      .banner-nav {
+        right: 50%;
+        transform: translateX(50%);
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">COIN</div>
+    <button class="toggle-switch" id="themeToggle" aria-label="Toggle Theme">
+      <span id="themeIcon">🌙</span>
+      <span id="themeText">Dark</span>
+    </button>
+  </header>
+
+  <main>
+    <!-- Works Banner -->
+    <section class="recent-work">
+      <div class="banner-bg" id="bannerBg"></div>
+      <div class="banner-content">
+        <div class="recent-work-label">WORKS</div>
+        <div class="banner-right">
+          <img class="banner-thumb" id="bannerThumb" src="ola.jpg" alt="Featured Project">
+          <h2 class="banner-title" id="bannerTitle">Ola - Kivumbi King</h2>
+          <p class="banner-class" id="bannerClass">Directed by Eazy Cuts</p>
+        </div>
+      </div>
+      <div class="banner-nav" id="bannerNav"></div>
+    </section>
+
+    <!-- Projects Grid - 2 per row -->
+    <div class="projects-grid">
+      <!-- Project 1: Ola -->
+      <div class="project">
+        <a href="https://www.youtube.com/watch?v=Eb1ujFaJ35w&pp=ygUDb2xh0gcJCcEJAYcqIYzv" target="_blank">
+          <img class="portfolio-thumb" src="ola.jpg" alt="Ola - Kivumbi King" />
+        </a>
+        <div class="project-info">
+          <p class="song-title">Ola - Kivumbi King</p>
+          <p class="class">Music Video</p>
+        </div>
+      </div>
+
+      <!-- Project 2: Respectful -->
+      <div class="project">
+        <a href="https://www.youtube.com/watch?v=G7atuyyprEA&pp=ygUKcmVzcGVjdGZ1bA%3D%3D" target="_blank">
+          <img class="portfolio-thumb" src="respectful.jpg" alt="Respectful - Ish Kevin" />
+        </a>
+        <div class="project-info">
+          <p class="song-title">Respectful - Ish Kevin</p>
+          <p class="class">Music Video</p>
+        </div>
+      </div>
+
+      <!-- Project 3: Ratata -->
+      <div class="project">
+        <a href="https://www.youtube.com/watch?v=nfhpTzrZczU&pp=ygUGcmF0YXRh" target="_blank">
+          <img class="portfolio-thumb" src="ratata.jpg" alt="Ratata - Diez Dola" />
+        </a>
+        <div class="project-info">
+          <p class="song-title">Ratata - Diez Dola</p>
+          <p class="class">Music Video</p>
+        </div>
+      </div>
+
+      <!-- Project 4: Street Goat -->
+      <div class="project">
+        <a href="https://www.youtube.com/watch?v=7DfKtySRTT0&pp=ygULc3RyZWV0IGdvYXQ%3D" target="_blank">
+          <img class="portfolio-thumb" src="goat.jpg" alt="Street Goat - Zeo Trap" />
+        </a>
+        <div class="project-info">
+          <p class="song-title">Street Goat - Zeo Trap</p>
+          <p class="class">Music Video</p>
+        </div>
+      </div>
+
+      <!-- Project 5: Who is my date today? - Uwase Muyango -->
+      <div class="project">
+        <a href="https://www.youtube.com/watch?v=Sjb9a-MPmo4&t=41s&pp=ygUHbXV5YW5nbw%3D%3D" target="_blank">
+          <img class="portfolio-thumb" src="muyango.jpg" alt="Who is my date today? - Uwase Muyango" />
+        </a>
+        <div class="project-info">
+          <p class="song-title">Who is my date today? - Uwase Muyango</p>
+          <p class="class">Youtube Tv Show</p>
+        </div>
+      </div>
+
+      <!-- New Project 6: Karite Jone - Hertos ft Diez Dola & Bushali -->
+      <div class="project">
+        <a href="https://www.youtube.com/watch?v=ZlNljz-TZfY&pp=ygULa2FyaXRlIGpvbmU%3D" target="_blank">
+          <img class="portfolio-thumb" src="jone.jpg" alt="Karite Jone - Hertos ft Diez Dola & Bushali" />
+        </a>
+        <div class="project-info">
+          <p class="song-title">Karite Jone - Hertos ft Diez Dola & Bushali</p>
+          <p class="class">Music Video</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Tabs -->
+    <div class="tab-links">
+      <a href="https://www.instagram.com/coin_____1" target="_blank">
+        <i class="fab fa-instagram"></i> Instagram
+      </a>
+      <a href="http://youtube.com/@CoinGiceri" target="_blank">
+        <i class="fab fa-youtube"></i> YouTube
+      </a>
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    const toggle = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+    const text = document.getElementById('themeText');
+
+    function setTheme(light) {
+      document.body.classList.toggle('light', light);
+      icon.textContent = light ? '☀️' : '🌙';
+      text.textContent = light ? 'Light' : 'Dark';
+      localStorage.setItem('theme', light ? 'light' : 'dark');
+    }
+
+    setTheme(localStorage.getItem('theme') === 'light');
+    toggle.onclick = () => setTheme(!document.body.classList.contains('light'));
+
+    // Recent Work Banner Animation - Only pinned projects
+    const pinnedProjects = [
+      {
+        title: "Ola - Kivumbi King",
+        class: "Directed by Eazy Cuts",
+        thumb: "ola.jpg",
+        bg: "ola.jpg",
+        link: "https://www.youtube.com/watch?v=Eb1ujFaJ35w"
+      },
+      {
+        title: "Ratata - Diez Dola",
+        class: "Directed by Coin",
+        thumb: "ratata.jpg",
+        bg: "ratata.jpg",
+        link: "https://www.youtube.com/watch?v=nfhpTzrZczU"
+      },
+      {
+        title: "Karite Jone - Hertos ft Diez Dola & Bushali",
+        class: "Directed by Coin",
+        thumb: "jone.jpg",
+        bg: "jone.jpg",
+        link: "https://www.youtube.com/watch?v=ZlNljz-TZfY"
+      }
+    ];
+
+    const bannerBg = document.getElementById('bannerBg');
+    const bannerThumb = document.getElementById('bannerThumb');
+    const bannerTitle = document.getElementById('bannerTitle');
+    const bannerClass = document.getElementById('bannerClass');
+    const bannerNav = document.getElementById('bannerNav');
+
+    let currentProject = 0;
+
+    // Create navigation dots (now squares)
+    pinnedProjects.forEach((_, index) => {
+      const dot = document.createElement('button');
+      dot.addEventListener('click', () => {
+        currentProject = index;
+        updateBanner();
+      });
+      bannerNav.appendChild(dot);
+    });
+
+    // Auto-rotate projects every 5 seconds
+    let bannerInterval = setInterval(nextProject, 5000);
+
+    function nextProject() {
+      currentProject = (currentProject + 1) % pinnedProjects.length;
+      updateBanner();
+    }
+
+    function updateBanner() {
+      const project = pinnedProjects[currentProject];
+      
+      // Reset interval
+      clearInterval(bannerInterval);
+      bannerInterval = setInterval(nextProject, 5000);
+      
+      // Update active dot
+      Array.from(bannerNav.children).forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentProject);
+      });
+
+      // Animate with GSAP
+      gsap.to(bannerBg, {
+        opacity: 0,
+        duration: 0.5,
+        onComplete: () => {
+          bannerBg.style.backgroundImage = `url(${project.bg})`;
+          gsap.to(bannerBg, { opacity: 1, duration: 0.5 });
+        }
+      });
+
+      gsap.fromTo(bannerThumb, 
+        { scale: 0.9, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.7, ease: "back.out(1.7)" }
+      );
+
+      gsap.fromTo([bannerTitle, bannerClass], 
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, stagger: 0.1 }
+      );
+
+      bannerThumb.src = project.thumb;
+      bannerTitle.textContent = project.title;
+      bannerClass.textContent = project.class;
+    }
+
+    // Initialize first project
+    updateBanner();
+
+    // Make banner clickable
+    document.querySelector('.banner-right').addEventListener('click', () => {
+      window.open(pinnedProjects[currentProject].link, '_blank');
+    });
+
+    // Header scroll effect - make slightly opaque when scrolling
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 50) {
+        header.style.background = 'rgba(14, 18, 23, 0.9)';
+        if (document.body.classList.contains('light')) {
+          header.style.background = 'rgba(247, 247, 247, 0.9)';
+        }
+      } else {
+        header.style.background = 'transparent';
+      }
+    });
+  </script>
+</body>
+</html>
